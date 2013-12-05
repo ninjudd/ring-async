@@ -4,7 +4,7 @@ Ring middleware for supporting asynchronous responses.
 
 ## Installation
 
-To use ring-async, add the following, along to your `:dependencies`:
+To use ring-async, add the following to your `:dependencies`:
 
     [com.ninjudd/ring-async "0.1.0"]
 
