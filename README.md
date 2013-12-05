@@ -19,18 +19,20 @@ request, simply wrap you handler in `ring.middleware.async/wrap-async-response` 
 response map where the `:body` is a core.async channel. Then, simply use a `go` block to add data to
 the body asynchronously.
 
-    (ns ring-async-sample
-      (:require [clojure.core.async :refer [go >! chan close!]]
-                [ring.middleware.async :refer [wrap-async-response]]))
+```clj
+(ns ring-async-sample
+  (:require [clojure.core.async :refer [go >! chan close!]]
+            [ring.middleware.async :refer [wrap-async-response]]))
 
-    (defn handler [request]
-      (let [body (chan)]
-        (go (loop [...]
-              (if ...
-                (>! body data)
-                (recur ...)))
-            (close! body))
-        {:body body}))
+(defn handler [request]
+  (let [body (chan)]
+    (go (loop [...]
+          (if ...
+            (>! body data)
+            (recur ...)))
+        (close! body))
+    {:body body}))
+```
 
 ## License
 
