@@ -14,7 +14,7 @@ This code also depends on a patch to ring, so you'll also need the following for
 
 ## Usage
 
-To return an asynchronous response, that doesn't consume a single thread for the duration of the
+To return an asynchronous response that doesn't consume a single thread for the duration of the
 request, simply wrap you handler in `ring.middleware.async/wrap-async-response` and return a
 response map where the `:body` is a core.async channel. Then, simply use a `go` block to add data to
 the body asynchronously.
