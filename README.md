@@ -11,6 +11,10 @@ To use ring-async, add the following to your `:dependencies`:
 This code also depends on a patch to ring, so you'll also need the following for now:
 
     [com.ninjudd/ring "1.2.2"]
+    
+And maybe also:
+
+    :exclusions [ring]
 
 ## Usage
 
