@@ -1,9 +1,8 @@
-(ns ring.middleware.async-test
+(ns ring.async.jetty-test
   (:use clojure.test)
   (:require [org.httpkit.client :as http]
             [clojure.core.async :refer [go >! <! timeout chan close!]]
-            [ring.adapter.jetty :refer [run-jetty]]
-            [ring.middleware.async :refer [wrap-async-response]]))
+            [ring.adapter.jetty-async :refer [run-jetty-async]]))
 
 (defn test-handler [request]
   (let [body (chan)]
@@ -20,8 +19,7 @@
     result))
 
 (deftest test-async-body
-  (let [handler (wrap-async-response test-handler)
-        jetty (run-jetty handler {:join? false :port 7700})]
+  (let [jetty (run-jetty-async test-handler {:join? false :port 7700})]
     (doseq [result (doall
                     (repeatedly 5000 get-async))]
       (is (= "0\n1\n2\n3\n4\n" @result)))

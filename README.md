@@ -1,32 +1,24 @@
 # ring-async
 
-Ring middleware for supporting asynchronous responses.
+Ring adapter for supporting asynchronous responses.
 
 ## Installation
 
 To use ring-async, add the following to your `:dependencies`:
 
-    [com.ninjudd/ring-async "0.1.0"]
-
-This code also depends on a patch to ring, so you'll also need the following for now:
-
-    [com.ninjudd/ring "1.2.2"]
-    
-And maybe also:
-
-    :exclusions [ring]
+    [com.ninjudd/ring-async "0.2.0"]
 
 ## Usage
 
 To return an asynchronous response that doesn't consume a single thread for the duration of the
-request, simply wrap you handler in `ring.middleware.async/wrap-async-response` and return a
-response map where the `:body` is a core.async channel. Then, simply use a `go` block to add data to
-the body asynchronously.
+request, just use `ring.adapter.jetty-async/run-jetty-async` instead of `ring.adapter.jetty/run-jetty`
+and return a response map where the `:body` is a core.async channel. Then, simply use a `go` block
+to add data to the body asynchronously.
 
 ```clj
 (ns ring-async-sample
   (:require [clojure.core.async :refer [go >! chan close!]]
-            [ring.middleware.async :refer [wrap-async-response]]))
+            [ring.adapter.jetty-async :refer [run-jetty-async]]))
 
 (defn handler [request]
   (let [body (chan)]
@@ -36,6 +28,9 @@ the body asynchronously.
             (recur ...)))
         (close! body))
     {:body body}))
+
+(defn start []
+  (run-jetty-async handler {:join? false :port 8000}))
 ```
 
 ## License
