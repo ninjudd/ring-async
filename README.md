@@ -10,10 +10,10 @@ To use ring-async, add the following to your `:dependencies`:
 
 ## Usage
 
-To return an asynchronous response that doesn't consume a single thread for the duration of the
-request, just use `ring.adapter.jetty-async/run-jetty-async` instead of `ring.adapter.jetty/run-jetty`
-and return a response map where the `:body` is a core.async channel. Then, simply use a `go` block
-to add data to the body asynchronously.
+To return an asynchronous response that doesn't consume a thread for the duration of the request,
+just use `ring.adapter.jetty-async/run-jetty-async` instead of `ring.adapter.jetty/run-jetty` and
+return a response map where the `:body` is a core.async channel. Then, simply use a `go` block to
+add data to the body asynchronously.
 
 ```clj
 (ns ring-async-sample
