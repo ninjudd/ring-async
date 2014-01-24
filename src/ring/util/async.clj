@@ -9,12 +9,14 @@
     (let [chan (:body response)
           async (.startAsync servlet-request)
           ^HttpServletResponse servlet-response (.getResponse async)
-          ^PrintWriter out (.getWriter servlet-response)]
-      (go (loop []
-            (when-let [data (<! chan)]
-              (.write out data)
-              (.flush out)
-              (recur)))
-          (.complete async))
+          content-type (get-in response [:headers "Content-Type"])]
+      (.setContentType servlet-response content-type)
+      (let [^PrintWriter out (.getWriter servlet-response)]
+        (go (loop []
+              (when-let [data (<! chan)]
+                (.write out data)
+                (.flush out)
+                (recur)))
+            (.complete async)))
       (dissoc response :body))
     response))
