@@ -1,11 +1,11 @@
 (ns ring.util.async
   (:require [clojure.core.async :refer [go <!]]
-            [clojure.core.async.impl.channels :refer [MMC]])
+            [clojure.core.async.impl.protocols :refer [Channel]])
   (:import (javax.servlet.http HttpServletRequest HttpServletResponse)
            (java.io PrintWriter)))
 
 (defn handle-async-body [response ^HttpServletRequest servlet-request]
-  (if (satisfies? MMC (:body response))
+  (if (satisfies? Channel (:body response))
     (let [chan (:body response)
           async (.startAsync servlet-request)
           ^HttpServletResponse servlet-response (.getResponse async)
