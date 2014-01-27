@@ -1,7 +1,6 @@
 (ns ring.util.async
-  (:require [clojure.core.async :refer [go <! map< close!]]
-            [clojure.core.async.impl.protocols :refer [Channel]]
-            [cheshire.core :as json])
+  (:require [clojure.core.async :refer [go <! close!]]
+            [clojure.core.async.impl.protocols :refer [Channel]])
   (:import (javax.servlet.http HttpServletRequest HttpServletResponse)
            (java.io PrintWriter)))
 
@@ -23,23 +22,3 @@
       (dissoc response :body))
     response))
 
-(defn add-sse-headers [request]
-  (-> request
-      (assoc-in [:headers "Content-Type"] "text/event-stream; charset=utf-8")
-      (assoc-in [:headers "Cache-Control"] "no-cache")))
-
-(defn edn-events [chan]
-  (add-sse-headers
-   {:body (map< (fn [event]
-                  (str "data: "
-                       (pr-str event)
-                       "\n\n"))
-                chan)}))
-
-(defn json-events [chan]
-  (add-sse-headers
-   {:body (map< (fn [event]
-                  (str "data: "
-                       (json/generate-string event)
-                       "\n\n"))
-                chan)}))
