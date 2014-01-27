@@ -1,5 +1,5 @@
 (ns ring.util.async
-  (:require [clojure.core.async :refer [go <! map<]]
+  (:require [clojure.core.async :refer [go <! map< close!]]
             [clojure.core.async.impl.protocols :refer [Channel]]
             [cheshire.core :as json])
   (:import (javax.servlet.http HttpServletRequest HttpServletResponse)
@@ -18,6 +18,7 @@
                 (.write out data)
                 (.flush out)
                 (recur)))
+            (close! chan)
             (.complete async)))
       (dissoc response :body))
     response))
