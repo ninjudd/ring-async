@@ -1,4 +1,4 @@
-(defproject com.ninjudd/ring-async "0.2.1"
+(defproject com.ninjudd/ring-async "0.2.2-SNAPSHOT"
   :description "Ring middleware adding support for asynchronous responses."
   :url "https://github.com/ninjudd/ring-async"
   :license {:name "The MIT License"
