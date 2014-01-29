@@ -7,7 +7,8 @@
 (defn handle-async-body [response ^HttpServletRequest servlet-request]
   (if (satisfies? Channel (:body response))
     (let [chan (:body response)
-          async (.startAsync servlet-request)
+          async (doto (.startAsync servlet-request)
+                  (.setTimeout 0))
           ^HttpServletResponse servlet-response (.getResponse async)
           content-type (get-in response [:headers "Content-Type"])]
       (.setContentType servlet-response content-type)
@@ -21,4 +22,3 @@
             (.complete async)))
       (dissoc response :body))
     response))
-
