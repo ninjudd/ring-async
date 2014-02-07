@@ -35,7 +35,7 @@ add data to the body asynchronously.
 
 ## Server-Sent Events
 
-If you'd like to use ring-async for Server-Sent Events, you can use (eventual)[http://github.com/ninjudd/eventual] which provides helper libraries for both the Server (Clojure) and the Client (ClojureScript).
+If you'd like to use ring-async for Server-Sent Events, you can use [eventual](http://github.com/ninjudd/eventual) which provides helper libraries for both the Server (Clojure) and the Client (ClojureScript).
 
 ## License
 
