@@ -33,6 +33,10 @@ add data to the body asynchronously.
   (run-jetty-async handler {:join? false :port 8000}))
 ```
 
+## Server-Sent Events
+
+If you'd like to use ring-async for Server-Sent Events, you can use (eventual)[http://github.com/ninjudd/eventual] which provides helper libraries for both the Server (Clojure) and the Client (ClojureScript).
+
 ## License
 
 Copyright © 2013 Justin Balthrop
