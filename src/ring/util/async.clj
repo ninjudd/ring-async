@@ -2,7 +2,7 @@
   (:require [clojure.core.async :refer [go <! close!]]
             [clojure.core.async.impl.protocols :refer [Channel]])
   (:import (javax.servlet.http HttpServletRequest HttpServletResponse)
-           (java.io PrintWriter)))
+           (javax.servlet ServletOutputStream)))
 
 (defn handle-async-body [response ^HttpServletRequest servlet-request]
   (if (satisfies? Channel (:body response))
@@ -12,13 +12,14 @@
           ^HttpServletResponse servlet-response (.getResponse async)
           content-type (get-in response [:headers "Content-Type"])]
       (.setContentType servlet-response content-type)
-      (let [^PrintWriter out (.getWriter servlet-response)]
+      (let [^ServletOutputStream out (.getOutputStream servlet-response)]
         (go (loop []
               (when-let [data (<! chan)]
-                (.write out data)
-                (.flush out)
+                (try (.write out data)
+                     (.flush out)
+                     (catch java.io.IOException e
+                       (close! chan)))
                 (recur)))
-            (close! chan)
             (.complete async)))
       (dissoc response :body))
     response))
