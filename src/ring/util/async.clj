@@ -15,10 +15,12 @@
       (let [^ServletOutputStream out (.getOutputStream servlet-response)]
         (go (loop []
               (when-let [data (<! chan)]
-                (try (.write out data)
-                     (.flush out)
-                     (catch java.io.IOException e
-                       (close! chan)))
+                (if (= :flush data)
+                  (.flushBuffer servlet-response)
+                  (try (.write out data)
+                       (.flush out)                  
+                       (catch java.io.IOException e
+                         (close! chan))))
                 (recur)))
             (.complete async)))
       (dissoc response :body))
