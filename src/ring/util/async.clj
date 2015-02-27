@@ -4,8 +4,11 @@
   (:import (javax.servlet.http HttpServletRequest HttpServletResponse)
            (javax.servlet ServletOutputStream)))
 
+(defn async-body? [response]
+  (satisfies? Channel (:body response)))
+
 (defn handle-async-body [response ^HttpServletRequest servlet-request]
-  (if (satisfies? Channel (:body response))
+  (if (async-body? response)
     (let [chan (:body response)
           async (doto (.startAsync servlet-request)
                   (.setTimeout 0))
